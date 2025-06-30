@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e3c72">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLM Services - Gestionnaire Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .company-info h1 {
+            color: #1e3c72;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .company-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .fiscal-alert {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-tab.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e3c72;
+        }
+
+        .form-control {
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .materials-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .material-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: perspective(1000px) rotateX(0deg) translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        .lang-btn {
+            padding: 5px 10px;
+            border: none;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .suggestions-box {
+            background: linear-gradient(135deg, #feca57, #ff9ff3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .suggestion-item {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            backdrop-filter: blur(5px);
+        }
+
+        .fiscal-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .fiscal-card {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .print-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .logo-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .material-item {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        .claude-ai-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header avec infos société -->
+        <div class="header">
+            <div class="logo-section">
+                <div class="company-info">
+                    <h1>GLM SERVICES</h1>
+                    <p>Guilhem Marquès - NIE: Y4802814Z</p>
+                    <p>C/ Rosari, 11 - 17486 Castelló d'Empúries</p>
+                    <p>Tel: 692084411 - glmserveis@gmail.com</p>
+                </div>
+                <div class="fiscal-alert" id="fiscalAlert">
+                    Prochain paiement trimestre: <span id="nextPayment">Avril 2025</span>
+                </div>
+                <div class="language-selector">
+                    <button class="lang-btn active" onclick="setLanguage('fr')">FR</button>
+                    <button class="lang-btn" onclick="setLanguage('cat')">CAT</button>
+                    <button class="lang-btn" onclick="setLanguage('es')">ESP</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="showTab('devis')">📋 Devis</button>
+            <button class="nav-tab" onclick="showTab('facture')">🧾 Facture</button>
+            <button class="nav-tab" onclick="showTab('materiel')">🔧 Matériel</button>
+            <button class="nav-tab" onclick="showTab('fiscal')">💰 Fiscal</button>
+            <button class="nav-tab" onclick="showTab('claude')">🤖 Claude IA</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <h2>Dashboard - Vue d'ensemble</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="monthlyRevenue">0€</div>
+                    <div class="stat-label">CA ce mois</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="quarterlyRevenue">0€</div>
+                    <div class="stat-label">CA ce trimestre</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="profitMargin">0€</div>
+                    <div class="stat-label">Marge brute</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="toProvision">0€</div>
+                    <div class="stat-label">À provisionner</div>
+                </div>
+            </div>
+            
+            <h3>Dernières factures</h3>
+            <div id="recentInvoices">
+                <p>Aucune facture enregistrée</p>
+            </div>
+        </div>
+
+        <!-- Devis Tab -->
+        <div id="devis" class="tab-content">
+            <h2>Créer un Devis</h2>
+            <form id="devisForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Client</label>
+                        <input type="text" class="form-control" id="clientName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Adresse</label>
+                        <input type="text" class="form-control" id="clientAddress">
+                    </div>
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="text" class="form-control" id="clientPhone">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="clientEmail">
+                    </div>
+                    <div class="form-group">
+                        <label>NIF Client</label>
+                        <input type="text" class="form-control" id="clientNif">
+                    </div>
+                    <div class="form-group">
+                        <label>Objet/Sujet</label>
+                        <input type="text" class="form-control" id="devisSubject" required>
+                    </div>
+                </div>
+
+                <div class="materials-section">
+                    <h3>Main d'œuvre et Matériel</h3>
+                    <div id="devisItems">
+                        <div class="material-item">
+                            <input type="text" placeholder="Description" class="form-control" name="description">
+                            <input type="number" placeholder="Prix unitaire HT" class="form-control" name="unitPrice" step="0.01">
+                            <input type="number" placeholder="Quantité" class="form-control" name="quantity" value="1">
+                            <input type="text" placeholder="Unité" class="form-control" name="unit" value="€">
+                            <span class="total-item">0.00€</span>
+                            <button type="button" class="btn btn-secondary" onclick="removeItem(this)">❌</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success" onclick="addDevisItem()">➕ Ajouter ligne</button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Total HT</label>
+                        <input type="text" class="form-control" id="totalHT" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>TVA (21%)</label>
+                        <input type="text" class="form-control" id="totalTVA" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Total TTC</label>
+                        <input type="text" class="form-control" id="totalTTC" readonly>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button type="button" class="btn btn-primary" onclick="generateDevis()">🖨️ Générer Devis</button>
+                    <button type="button" class="btn btn-success" onclick="saveDevis()">💾 Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Facture Tab -->
+        <div id="facture" class="tab-content">
+            <h2>Créer une Facture</h2>
+            <form id="factureForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Cliente</label>
+                        <input type="text" class="form-control" id="factureClientName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" class="form-control" id="factureClientAddress">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" class="form-control" id="factureClientPhone">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="factureClientEmail">
+                    </div>
+                    <div class="form-group">
+                        <label>NIF</label>
+                        <input type="text" class="form-control" id="factureClientNif">
+                    </div>
+                    <div class="form-group">
+                        <label>Objet</label>
+                        <input type="text" class="form-control" id="factureSubject" required>
+                    </div>
+                </div>
+
+                <div class="materials-section">
+                    <h3>Materiel et Main D'œuvre</h3>
+                    <div id="factureItems">
+                        <div class="material-item">
+                            <input type="text" placeholder="Description" class="form-control" name="description">
+                            <input type="number" placeholder="Prix unitaire HT" class="form-control" name="unitPrice" step="0.01">
+                            <input type="number" placeholder="Quantité" class="form-control" name="quantity" value="1">
+                            <input type="text" placeholder="Unité" class="form-control" name="unit" value="€">
+                            <span class="total-item">0.00€</span>
+                            <button type="button" class="btn btn-secondary" onclick="removeItem(this)">❌</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success" onclick="addFactureItem()">➕ Ajouter ligne</button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Total s/ IVA</label>
+                        <input type="text" class="form-control" id="factureHT" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>IVA 21%</label>
+                        <input type="text" class="form-control" id="factureTVA" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Total amb IVA</label>
+                        <input type="text" class="form-control" id="factureTTC" readonly>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button type="button" class="btn btn-primary" onclick="generateFacture()">🖨️ Générer Facture</button>
+                    <button type="button" class="btn btn-success" onclick="saveFacture()">💾 Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Matériel Tab -->
+        <div id="materiel" class="tab-content">
+            <h2>Gestion Matériel et Main d'œuvre</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Catégorie</label>
+                    <select class="form-control" id="materialCategory">
+                        <option value="plomberie">Plomberie</option>
+                        <option value="electricite">Électricité</option>
+                        <option value="maconnerie">Maçonnerie</option>
+                        <option value="couverture">Couverture</option>
+                        <option value="peinture">Peinture</option>
+                        <option value="main-oeuvre">Main d'œuvre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" class="form-control" id="materialDescription" placeholder="ex: Tube PVC 80mm">
+                </div>
+                <div class="form-group">
+                    <label>Prix d'achat HT</label>
+                    <input type="number" class="form-control" id="buyPrice" step="0.01" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label>Coefficient marge</label>
+                    <input type="number" class="form-control" id="marginCoeff" step="0.1" value="1.3" placeholder="1.3">
+                </div>
+                <div class="form-group">
+                    <label>Prix de vente HT</label>
+                    <input type="number" class="form-control" id="sellPrice" step="0.01" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Unité</label>
+                    <input type="text" class="form-control" id="materialUnit" placeholder="pièce, m, h" value="pièce">
+                </div>
+            </div>
+
+            <button class="btn btn-success" onclick="addMaterial()">➕ Ajouter au stock</button>
+
+            <div id="materialsList" style="margin-top: 30px;">
+                <h3>Stock enregistré</h3>
+                <div id="materialsContainer">
+                    <p>Aucun matériel enregistré</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fiscal Tab -->
+        <div id="fiscal" class="tab-content">
+            <h2>Gestion Fiscale - Autonomo</h2>
+            
+            <div class="fiscal-dashboard">
+                <div class="fiscal-card">
+                    <h3>Trimestre en cours</h3>
+                    <div class="stat-value" id="currentQuarter">T1 2025</div>
+                    <p>Échéance: <span id="quarterDeadline">Avril 2025</span></p>
+                </div>
+                
+                <div class="fiscal-card">
+                    <h3>CA Trimestre</h3>
+                    <div class="stat-value" id="quarterCA">0€</div>
+                    <p>Facturation HT</p>
+                </div>
+                
+                <div class="fiscal-card">
+                    <h3>TVA à reverser</h3>
+                    <div class="stat-value" id="tvaToReverse">0€</div>
+                    <p>21% sur CA</p>
+                </div>
+                
+                <div class="fiscal-card">
+                    <h3>IRPF estimé</h3>
+                    <div class="stat-value" id="irpfEstimate">0€</div>
+                    <p>Selon revenus annuels</p>
+                </div>
+                
+                <div class="fiscal-card">
+                    <h3>Sécurité Sociale</h3>
+                    <div class="stat-value" id="ssAmount">294€</div>
+                    <p>Base minimum mensuelle</p>
+                </div>
+                
+                <div class="fiscal-card">
+                    <h3>Total à provisionner</h3>
+                    <div class="stat-value" id="totalProvision">0€</div>
+                    <p>Montant sécurisé</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                <h3>Conseil automatique</h3>
+                <p id="fiscalAdvice">Provisionnez 35% de chaque facture pour couvrir vos obligations fiscales trimestrielles.</p>
+            </div>
+        </div>
+
+        <!-- Claude IA Tab -->
+        <div id="claude" class="tab-content">
+            <div class="claude-ai-section">
+                <h2>🤖 Suggestions Claude IA</h2>
+                <p>Décrivez votre projet et obtenez 3 devis optimisés</p>
+            </div>
+            
+            <div class="form-group">
+                <label>Description du chantier</label>
+                <textarea class="form-control" id="projectDescription" rows="4" placeholder="Exemple: Réparation fuite dans salle de bain, remplacement réseau eau chaude, pose carrelage 5m²..."></textarea>
+            </div>
+            
+            <button class="btn btn-primary" onclick="getClaudeSuggestions()">
+                <span id="claudeLoading" style="display: none;" class="loading-spinner"></span>
+                💡 Générer 3 devis suggérés
+            </button>
+            
+            <div id="claudeSuggestions" class="suggestions-box" style="display: none;">
+                <h3>Suggestions de devis</h3>
+                <div id="suggestionsContent"></div>
+            </div>
+        </div>
+
+        <!-- Zone d'impression -->
+        <div id="printArea" class="print-section" style="display: none;">
+            <div id="documentContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentLanguage = 'fr';
+        let materials = [];
+        let invoices = [];
+        let quotes = [];
+        let fiscalData = {
+            currentQuarter: 1,
+            quarterCA: 0,
+            yearlyRevenue: 0
+        };
+
+        // Textes multilingues
+        const translations = {
+            fr: {
+                quote: 'DEVIS',
+                invoice: 'FACTURE',
+                client: 'Client:',
+                address: 'Adresse:',
+                phone: 'Téléphone:',
+                email: 'Email:',
+                nif: 'NIF:',
+                date: 'Date:',
+                description: 'Description',
+                unitPrice: 'Prix unitaire',
+                quantity: 'Quantité',
+                total: 'Total',
+                subtotal: 'Total HT',
+                vat: 'TVA 21%',
+                totalVat: 'Total TTC',
+                object: 'Objet:',
+                signature: 'Signature Client:',
+                additionalWork: '* Tout travail supplémentaire sera soumis à un supplément.*',
+                priceVariation: '** Le prix du devis pourra varier +/- en fonction du progrès de l\'œuvre**'
+            },
+            cat: {
+                quote: 'PRESSUPOST',
+                invoice: 'FACTURA',
+                client: 'Client:',
+                address: 'Adreça:',
+                phone: 'Telèfon:',
+                email: 'Email:',
+                nif: 'NIF:',
+                date: 'Data:',
+                description: 'Descripció',
+                unitPrice: 'Preu unitari',
+                quantity: 'Quantitat',
+                total: 'Total',
+                subtotal: 'Total s/ IVA',
+                vat: 'IVA 21%',
+                totalVat: 'Total IVA inclòs',
+                object: 'Assumpte:',
+                signature: 'Firma Client:',
+                additionalWork: '* Tota la feina addicional estarà subjecta a un suplement.*',
+                priceVariation: '** El preu del pressupost podrà variar +/- en funció del progrés de l\'obra**'
+            },
+            es: {
+                quote: 'PRESUPUESTO',
+                invoice: 'FACTURA',
+                client: 'Cliente:',
+                address: 'Dirección:',
+                phone: 'Teléfono:',
+                email: 'Email:',
+                nif: 'NIF:',
+                date: 'Fecha:',
+                description: 'Descripción',
+                unitPrice: 'Precio unitario',
+                quantity: 'Cantidad',
+                total: 'Total',
+                subtotal: 'Total s/ IVA',
+                vat: 'IVA 21%',
+                totalVat: 'Total con IVA',
+                object: 'Objeto:',
+                signature: 'Firma Cliente:',
+                additionalWork: '* Todo trabajo adicional estará sujeto a un suplemento.*',
+                priceVariation: '** El precio del presupuesto podrá variar +/- en función del progreso de la obra**'
+            }
+        };
+
+        // Initialisation au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateDashboard();
+            updateFiscalData();
+            calculateMargin();
+        });
+
+        // Gestion des onglets
+        function showTab(tabName) {
+            // Masquer tous les onglets
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Afficher l'onglet sélectionné
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Gestion des langues
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Calcul automatique des marges
+        function calculateMargin() {
+            const buyPrice = parseFloat(document.getElementById('buyPrice').value) || 0;
+            const marginCoeff = parseFloat(document.getElementById('marginCoeff').value) || 1.3;
+            const sellPrice = buyPrice * marginCoeff;
+            document.getElementById('sellPrice').value = sellPrice.toFixed(2);
+        }
+
+        // Event listeners pour calcul marge
+        document.getElementById('buyPrice').addEventListener('input', calculateMargin);
+        document.getElementById('marginCoeff').addEventListener('input', calculateMargin);
+
+        // Ajouter matériel au stock
+        function addMaterial() {
+            const material = {
+                id: Date.now(),
+                category: document.getElementById('materialCategory').value,
+                description: document.getElementById('materialDescription').value,
+                buyPrice: parseFloat(document.getElementById('buyPrice').value) || 0,
+                marginCoeff: parseFloat(document.getElementById('marginCoeff').value) || 1.3,
+                sellPrice: parseFloat(document.getElementById('sellPrice').value) || 0,
+                unit: document.getElementById('materialUnit').value || 'pièce'
+            };
+
+            if (!material.description) {
+                alert('Veuillez saisir une description');
+                return;
+            }
+
+            materials.push(material);
+            saveData();
+            displayMaterials();
+            clearMaterialForm();
+        }
+
+        // Afficher la liste des matériaux
+        function displayMaterials() {
+            const container = document.getElementById('materialsContainer');
+            if (materials.length === 0) {
+                container.innerHTML = '<p>Aucun matériel enregistré</p>';
+                return;
+            }
+
+            let html = '<div style="display: grid; gap: 10px;">';
+            materials.forEach(material => {
+                const profit = ((material.sellPrice - material.buyPrice) / material.buyPrice * 100).toFixed(1);
+                html += `
+                    <div class="material-item">
+                        <strong>${material.description}</strong>
+                        <span>Catégorie: ${material.category}</span>
+                        <span>Achat: ${material.buyPrice.toFixed(2)}€</span>
+                        <span>Vente: ${material.sellPrice.toFixed(2)}€</span>
+                        <span style="color: green;">Marge: ${profit}%</span>
+                        <button class="btn btn-secondary" onclick="deleteMaterial(${material.id})">🗑️</button>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Supprimer matériel
+        function deleteMaterial(id) {
+            materials = materials.filter(m => m.id !== id);
+            saveData();
+            displayMaterials();
+        }
+
+        // Vider formulaire matériel
+        function clearMaterialForm() {
+            document.getElementById('materialDescription').value = '';
+            document.getElementById('buyPrice').value = '';
+            document.getElementById('sellPrice').value = '';
+            document.getElementById('materialUnit').value = 'pièce';
+        }
+
+        // Ajouter ligne devis
+        function addDevisItem() {
+            const container = document.getElementById('devisItems');
+            const newItem = document.createElement('div');
+            newItem.className = 'material-item';
+            newItem.innerHTML = `
+                <input type="text" placeholder="Description" class="form-control" name="description">
+                <input type="number" placeholder="Prix unitaire HT" class="form-control" name="unitPrice" step="0.01" oninput="calculateLineTotal(this)">
+                <input type="number" placeholder="Quantité" class="form-control" name="quantity" value="1" oninput="calculateLineTotal(this)">
+                <input type="text" placeholder="Unité" class="form-control" name="unit" value="€">
+                <span class="total-item">0.00€</span>
+                <button type="button" class="btn btn-secondary" onclick="removeItem(this)">❌</button>
+            `;
+            container.appendChild(newItem);
+        }
+
+        // Ajouter ligne facture
+        function addFactureItem() {
+            const container = document.getElementById('factureItems');
+            const newItem = document.createElement('div');
+            newItem.className = 'material-item';
+            newItem.innerHTML = `
+                <input type="text" placeholder="Description" class="form-control" name="description">
+                <input type="number" placeholder="Prix unitaire HT" class="form-control" name="unitPrice" step="0.01" oninput="calculateLineTotal(this)">
+                <input type="number" placeholder="Quantité" class="form-control" name="quantity" value="1" oninput="calculateLineTotal(this)">
+                <input type="text" placeholder="Unité" class="form-control" name="unit" value="€">
+                <span class="total-item">0.00€</span>
+                <button type="button" class="btn btn-secondary" onclick="removeItem(this)">❌</button>
+            `;
+            container.appendChild(newItem);
+        }
+
+        // Supprimer ligne
+        function removeItem(button) {
+            button.parentElement.remove();
+            calculateTotals();
+        }
+
+        // Calculer total d'une ligne
+        function calculateLineTotal(input) {
+            const row = input.parentElement;
+            const unitPrice = parseFloat(row.querySelector('input[name="unitPrice"]').value) || 0;
+            const quantity = parseFloat(row.querySelector('input[name="quantity"]').value) || 0;
+            const total = unitPrice * quantity;
+            row.querySelector('.total-item').textContent = total.toFixed(2) + '€';
+            calculateTotals();
+        }
+
+        // Calculer totaux devis/facture
+        function calculateTotals() {
+            const activeTab = document.querySelector('.tab-content.active').id;
+            const isDevis = activeTab === 'devis';
+            const container = isDevis ? 'devisItems' : 'factureItems';
+            
+            let totalHT = 0;
+            document.querySelectorAll(`#${container} .material-item`).forEach(row => {
+                const unitPrice = parseFloat(row.querySelector('input[name="unitPrice"]').value) || 0;
+                const quantity = parseFloat(row.querySelector('input[name="quantity"]').value) || 0;
+                totalHT += unitPrice * quantity;
+            });
+
+            const tva = totalHT * 0.21;
+            const totalTTC = totalHT + tva;
+
+            if (isDevis) {
+                document.getElementById('totalHT').value = totalHT.toFixed(2) + '€';
+                document.getElementById('totalTVA').value = tva.toFixed(2) + '€';
+                document.getElementById('totalTTC').value = totalTTC.toFixed(2) + '€';
+            } else {
+                document.getElementById('factureHT').value = totalHT.toFixed(2) + '€';
+                document.getElementById('factureTVA').value = tva.toFixed(2) + '€';
+                document.getElementById('factureTTC').value = totalTTC.toFixed(2) + '€';
+            }
+        }
+
+        // Générer devis
+        function generateDevis() {
+    const requiredFields = [
+        { id: 'clientName', required: true },
+        { id: 'clientEmail', type: 'email', required: true },
+        { id: 'devisSubject', required: true }
+    ];
+    if (!validateForm(requiredFields)) {
+        alert('❌ Veuillez corriger les erreurs dans le formulaire.');
+        return;
+    }
+            const client = document.getElementById('clientName').value;
+            if (!client) {
+                alert('Veuillez saisir le nom du client');
+                return;
+            }
+
+            const devisData = {
+                type: 'devis',
+                client: {
+                    name: document.getElementById('clientName').value,
+                    address: document.getElementById('clientAddress').value,
+                    phone: document.getElementById('clientPhone').value,
+                    email: document.getElementById('clientEmail').value,
+                    nif: document.getElementById('clientNif').value
+                },
+                subject: document.getElementById('devisSubject').value,
+                items: [],
+                date: new Date().toLocaleDateString('fr-FR')
+            };
+
+            // Collecter les items
+            document.querySelectorAll('#devisItems .material-item').forEach(row => {
+                const description = row.querySelector('input[name="description"]').value;
+                const unitPrice = parseFloat(row.querySelector('input[name="unitPrice"]').value) || 0;
+                const quantity = parseFloat(row.querySelector('input[name="quantity"]').value) || 0;
+                const unit = row.querySelector('input[name="unit"]').value;
+                
+                if (description && unitPrice > 0) {
+                    devisData.items.push({
+                        description,
+                        unitPrice,
+                        quantity,
+                        unit,
+                        total: unitPrice * quantity
+                    });
+                }
+            });
+
+            generateDocument(devisData);
+        }
+
+        // Générer facture
+        function generateFacture() {
+    const requiredFields = [
+        { id: 'factureClientName', required: true },
+        { id: 'factureClientEmail', type: 'email', required: true },
+        { id: 'factureSubject', required: true }
+    ];
+    if (!validateForm(requiredFields)) {
+        alert('❌ Veuillez corriger les erreurs dans le formulaire.');
+        return;
+    }
+            const client = document.getElementById('factureClientName').value;
+            if (!client) {
+                alert('Veuillez saisir le nom du client');
+                return;
+            }
+
+            const factureData = {
+                type: 'facture',
+                client: {
+                    name: document.getElementById('factureClientName').value,
+                    address: document.getElementById('factureClientAddress').value,
+                    phone: document.getElementById('factureClientPhone').value,
+                    email: document.getElementById('factureClientEmail').value,
+                    nif: document.getElementById('factureClientNif').value
+                },
+                subject: document.getElementById('factureSubject').value,
+                items: [],
+                date: new Date().toLocaleDateString('fr-FR')
+            };
+
+            // Collecter les items
+            document.querySelectorAll('#factureItems .material-item').forEach(row => {
+                const description = row.querySelector('input[name="description"]').value;
+                const unitPrice = parseFloat(row.querySelector('input[name="unitPrice"]').value) || 0;
+                const quantity = parseFloat(row.querySelector('input[name="quantity"]').value) || 0;
+                const unit = row.querySelector('input[name="unit"]').value;
+                
+                if (description && unitPrice > 0) {
+                    factureData.items.push({
+                        description,
+                        unitPrice,
+                        quantity,
+                        unit,
+                        total: unitPrice * quantity
+                    });
+                }
+            });
+
+            generateDocument(factureData);
+        }
+
+        // Générer document PDF
+        function generateDocument(data) {
+            const t = translations[currentLanguage];
+            const isDevis = data.type === 'devis';
+            
+            let totalHT = data.items.reduce((sum, item) => sum + item.total, 0);
+            let tva = totalHT * 0.21;
+            let totalTTC = totalHT + tva;
+
+            const html = `
+                <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h1 style="color: #1e3c72; font-size: 2rem;">${isDevis ? t.quote : t.invoice}</h1>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+                        <div>
+                            <h3>GLM SERVICES</h3>
+                            <p>Guilhem Marquès<br>
+                            C/ Rosari, 11<br>
+                            17486 Castelló d'Empúries<br>
+                            NIE: Y4802814Z<br>
+                            Tel: 692084411<br>
+                            glmserveis@gmail.com<br>
+                            RC: BIDU009155</p>
+                        </div>
+                        <div>
+                            <h3>${t.client}</h3>
+                            <p><strong>${data.client.name}</strong><br>
+                            ${t.address} ${data.client.address || ''}<br>
+                            ${t.phone} ${data.client.phone || ''}<br>
+                            ${t.email} ${data.client.email || ''}<br>
+                            ${t.nif} ${data.client.nif || ''}</p>
+                        </div>
+                    </div>
+                    
+                    <p><strong>Castelló d'Empúries,</strong> ${data.date}</p>
+                    
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <thead>
+                            <tr style="background-color: #f0f0f0;">
+                                <th style="border: 1px solid #ddd; padding: 10px; text-align: left;">${t.description}</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">${t.unitPrice}</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">${t.quantity}</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; text-align: right;">${t.total}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.items.map(item => `
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 10px;">${item.description}</td>
+                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${item.unitPrice.toFixed(2)}€</td>
+                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${item.quantity}</td>
+                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: right;">${item.total.toFixed(2)}€</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div style="margin-top: 30px; text-align: right;">
+                        <p><strong>${t.subtotal}: ${totalHT.toFixed(2)}€</strong></p>
+                        <p><strong>${t.vat}: ${tva.toFixed(2)}€</strong></p>
+                        <p style="font-size: 1.2rem; color: #1e3c72;"><strong>${t.totalVat}: ${totalTTC.toFixed(2)}€</strong></p>
+                    </div>
+                    
+                    ${isDevis ? `
+                        <div style="margin-top: 40px; font-size: 0.9rem;">
+                            <p>${t.additionalWork}</p>
+                            <p>${t.priceVariation}</p>
+                            <br>
+                            <p>${t.signature} ________________</p>
+                            <p>Date: ________________</p>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="margin-top: 30px; text-align: center; font-weight: bold;">
+                        <p>${t.object} ${data.subject}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('documentContent').innerHTML = html;
+            document.getElementById('printArea').style.display = 'block';
+            
+            // Auto-scroll vers le document
+            document.getElementById('printArea').scrollIntoView({ behavior: 'smooth' });
+            
+            // Option d'impression
+            setTimeout(() => {
+                if (confirm('Voulez-vous imprimer ce document ?')) {
+                    window.print();
+                }
+            }, 1000);
+        }
+
+        // Sauvegarder devis/facture
+        function saveDevis() {
+            // Logique de sauvegarde devis
+            alert('Devis sauvegardé !');
+        }
+
+        function saveFacture() {
+            const factureData = {
+                id: Date.now(),
+                client: document.getElementById('factureClientName').value,
+                date: new Date(),
+                amount: parseFloat(document.getElementById('factureHT').value) || 0,
+                subject: document.getElementById('factureSubject').value
+            };
+            
+            invoices.push(factureData);
+            fiscalData.quarterCA += factureData.amount;
+            saveData();
+            updateDashboard();
+            updateFiscalData();
+            alert('Facture sauvegardée !');
+        }
+
+        // Suggestions Claude IA
+        function getClaudeSuggestions() {
+            const description = document.getElementById('projectDescription').value;
+            if (!description) {
+                alert('Veuillez décrire votre projet');
+                return;
+            }
+
+            const loadingEl = document.getElementById('claudeLoading');
+            const suggestionsEl = document.getElementById('claudeSuggestions');
+            
+            loadingEl.style.display = 'inline-block';
+            
+            // Simulation suggestions IA (à remplacer par vraie intégration)
+            setTimeout(() => {
+                loadingEl.style.display = 'none';
+                suggestionsEl.style.display = 'block';
+                
+                const suggestions = generateMockSuggestions(description);
+                document.getElementById('suggestionsContent').innerHTML = suggestions;
+            }, 2000);
+        }
+
+        function generateMockSuggestions(description) {
+            // Analyse simple du texte pour suggestions
+            const isPlumbing = description.toLowerCase().includes('fuite') || description.toLowerCase().includes('plomberie') || description.toLowerCase().includes('eau');
+            const isElectric = description.toLowerCase().includes('électric') || description.toLowerCase().includes('prise') || description.toLowerCase().includes('lumière');
+            const isTiling = description.toLowerCase().includes('carrelage') || description.toLowerCase().includes('carreau');
+
+            let basePrice = 200;
+            if (isPlumbing) basePrice = 300;
+            if (isElectric) basePrice = 150;
+            if (isTiling) basePrice = 400;
+
+            return `
+                <div class="suggestion-item">
+                    <h4>💰 Devis Économique</h4>
+                    <p><strong>${(basePrice * 0.8).toFixed(0)}€ HT</strong></p>
+                    <p>Matériaux standard + 3h main d'œuvre</p>
+                    <button class="btn btn-success" onclick="applySuggestion(${basePrice * 0.8}, 'economique')">Utiliser ce devis</button>
+                </div>
+                <div class="suggestion-item">
+                    <h4>⭐ Devis Optimal</h4>
+                    <p><strong>${basePrice.toFixed(0)}€ HT</strong></p>
+                    <p>Bon rapport qualité/prix + garantie</p>
+                    <button class="btn btn-success" onclick="applySuggestion(${basePrice}, 'optimal')">Utiliser ce devis</button>
+                </div>
+                <div class="suggestion-item">
+                    <h4>👑 Devis Premium</h4>
+                    <p><strong>${(basePrice * 1.4).toFixed(0)}€ HT</strong></p>
+                    <p>Matériaux haut de gamme + finitions</p>
+                    <button class="btn btn-success" onclick="applySuggestion(${basePrice * 1.4}, 'premium')">Utiliser ce devis</button>
+                </div>
+            `;
+        }
+
+        function applySuggestion(price, type) {
+            // Pré-remplir le formulaire devis avec la suggestion
+            showTab('devis');
+            document.querySelector('.nav-tab[onclick="showTab(\'devis\')"]').click();
+            
+            // Ajouter ligne avec prix suggéré
+            const container = document.getElementById('devisItems');
+            const firstRow = container.querySelector('.material-item');
+            firstRow.querySelector('input[name="description"]').value = `Prestation ${type}`;
+            firstRow.querySelector('input[name="unitPrice"]').value = price;
+            firstRow.querySelector('input[name="quantity"]').value = 1;
+            
+            calculateLineTotal(firstRow.querySelector('input[name="unitPrice"]'));
+            
+            alert(`Devis ${type} appliqué ! Vous pouvez modifier les détails.`);
+        }
+
+        // Mise à jour dashboard
+        function updateDashboard() {
+            const thisMonth = new Date().getMonth();
+            const monthlyRevenue = invoices
+                .filter(inv => new Date(inv.date).getMonth() === thisMonth)
+                .reduce((sum, inv) => sum + inv.amount, 0);
+
+            document.getElementById('monthlyRevenue').textContent = monthlyRevenue.toFixed(0) + '€';
+            document.getElementById('quarterlyRevenue').textContent = fiscalData.quarterCA.toFixed(0) + '€';
+            
+            // Calcul marge approximative (30% sur CA)
+            const estimatedProfit = fiscalData.quarterCA * 0.3;
+            document.getElementById('profitMargin').textContent = estimatedProfit.toFixed(0) + '€';
+            
+            // Provision recommandée (35% du CA)
+            const provision = fiscalData.quarterCA * 0.35;
+            document.getElementById('toProvision').textContent = provision.toFixed(0) + '€';
+
+            // Affichage dernières factures
+            const recentEl = document.getElementById('recentInvoices');
+            if (invoices.length > 0) {
+                const recent = invoices.slice(-5).reverse();
+                recentEl.innerHTML = recent.map(inv => `
+                    <div style="padding: 10px; background: white; margin: 5px 0; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <strong>${inv.client}</strong> - ${inv.amount.toFixed(2)}€ - ${new Date(inv.date).toLocaleDateString()}
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Mise à jour données fiscales
+        function updateFiscalData() {
+            const currentQuarter = Math.floor(new Date().getMonth() / 3) + 1;
+            const quarterNames = ['T1', 'T2', 'T3', 'T4'];
+            const deadlines = ['Avril', 'Juillet', 'Octobre', 'Janvier'];
+            
+            document.getElementById('currentQuarter').textContent = quarterNames[currentQuarter - 1] + ' 2025';
+            document.getElementById('quarterDeadline').textContent = deadlines[currentQuarter - 1] + ' 2025';
+            document.getElementById('quarterCA').textContent = fiscalData.quarterCA.toFixed(0) + '€';
+            
+            // Calculs fiscaux
+            const tvaToReverse = fiscalData.quarterCA * 0.21;
+            const irpfEstimate = fiscalData.quarterCA * 0.15; // Estimation 15%
+            const ssAmount = 294 * 3; // 3 mois
+            const totalProvision = tvaToReverse + irpfEstimate + ssAmount;
+            
+            document.getElementById('tvaToReverse').textContent = tvaToReverse.toFixed(0) + '€';
+            document.getElementById('irpfEstimate').textContent = irpfEstimate.toFixed(0) + '€';
+            document.getElementById('ssAmount').textContent = ssAmount.toFixed(0) + '€';
+            document.getElementById('totalProvision').textContent = totalProvision.toFixed(0) + '€';
+            
+            // Conseil automatique
+            const adviceEl = document.getElementById('fiscalAdvice');
+            if (fiscalData.quarterCA > 0) {
+                const percentToProvision = (totalProvision / fiscalData.quarterCA * 100).toFixed(1);
+                adviceEl.textContent = `Provisionnez ${percentToProvision}% de chaque facture (${totalProvision.toFixed(0)}€ sur ${fiscalData.quarterCA.toFixed(0)}€ de CA) pour couvrir vos obligations trimestrielles.`;
+            }
+        }
+
+        // Sauvegarde données locales
+        function saveData() {
+            const data = {
+                materials,
+                invoices,
+                quotes,
+                fiscalData
+            };
+            // En production, sauvegarder en base de données
+            console.log('Données sauvegardées:', data);
+        }
+
+        // Chargement données
+        function loadData() {
+            displayMaterials();
+            // En production, charger depuis base de données
+        }
+
+        // Event listeners pour calculs automatiques
+        document.addEventListener('input', function(e) {
+            if (e.target.name === 'unitPrice' || e.target.name === 'quantity') {
+                calculateLineTotal(e.target);
+            }
+        });
+    
+// ========== PERSISTENCE LOCALSTORAGE + NUMÉROTATION ==========
+
+let devisCounter = parseInt(localStorage.getItem('devisCounter')) || 1;
+let factureCounter = parseInt(localStorage.getItem('factureCounter')) || 1;
+
+function getNextDevisNumber() {
+    const number = 'DEV-' + devisCounter.toString().padStart(4, '0');
+    devisCounter++;
+    localStorage.setItem('devisCounter', devisCounter);
+    return number;
+}
+
+function getNextFactureNumber() {
+    const number = 'FAC-' + factureCounter.toString().padStart(4, '0');
+    factureCounter++;
+    localStorage.setItem('factureCounter', factureCounter);
+    return number;
+}
+
+function saveData() {
+    const data = {
+        materials,
+        invoices,
+        quotes,
+        fiscalData,
+        devisCounter,
+        factureCounter
+    };
+    localStorage.setItem('glm_data', JSON.stringify(data));
+    console.log("✅ Données sauvegardées.");
+}
+
+function loadData() {
+    const saved = localStorage.getItem('glm_data');
+    if (saved) {
+        const data = JSON.parse(saved);
+        materials = data.materials || [];
+        invoices = data.invoices || [];
+        quotes = data.quotes || [];
+        fiscalData = data.fiscalData || fiscalData;
+        devisCounter = data.devisCounter || 1;
+        factureCounter = data.factureCounter || 1;
+        console.log("✅ Données chargées.");
+    }
+}
+
+
+// ========== ENREGISTREMENT DU SERVICE WORKER ==========
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('✅ Service Worker enregistré', reg))
+            .catch(err => console.error('❌ Erreur Service Worker', err));
+    });
+}
+
+
+// ========== VALIDATION DES FORMULAIRES ==========
+
+function isValidEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
+
+function validateForm(fields) {
+    let valid = true;
+    fields.forEach(field => {
+        const input = document.getElementById(field.id);
+        const value = input.value.trim();
+        const isEmail = field.type === 'email';
+
+        input.classList.remove('error');
+        if ((field.required && !value) || (isEmail && !isValidEmail(value))) {
+            input.classList.add('error');
+            valid = false;
+        }
+    });
+    return valid;
+}
+
+</script>
+</body>
+</html>
